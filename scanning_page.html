@@ -18,7 +18,7 @@
                 <a href="scanning_page.html" class="active">Scan Food</a>
                 <a href="about_us.html">About Us</a>
                 <a href="contact_us.html">Contact Us</a>
-                <a href="#">How It Works</a>
+                <a href="howitwork.html">How It Works</a>
             </div>
         </nav>
 
@@ -55,9 +55,9 @@
                     </p>
                 </div>
 
-                <!-- COMMENT -->
+                <!-- Tips -->
                 <div class="advise-container">
-                    <h2><br>Comment</h2>
+                    <h2><br>Tips</h2>
                     <p id="advise">--</p>
                 </div>
             </div>
@@ -88,7 +88,7 @@
                     <div class="footer-text">
                         <h3>Information</h3>
                         <a href="about_us.html">About Us</a>
-                        <a href="#">How It Works</a>
+                        <a href="howitwork.html">How It Works</a>
                         <a href="contact_us.html">Contact Us</a>
                     </div>
                 </div>
@@ -111,8 +111,7 @@
         <script>
 
             // TEACHABLE MACHINE MODEL
-            const URL =
-                "https://teachablemachine.withgoogle.com/models/8vgNz6dqe/";
+            const URL = "https://teachablemachine.withgoogle.com/models/8vgNz6dqe/";
 
             let model;
             let webcam;
@@ -226,11 +225,16 @@
                 "Cup Ice Cream": {
                     type: "drink",
                     health: "unhealthy"
+                },
+
+                "Unknown": {
+                    type : "not available",
+                    health: "not available"
                 }
             };
 
-            // SFHERA COMMENTS
-            const comments = {
+            // SFHERA TipsS
+            const Tipss = {
 
                 // FOOD
                 "healthy_food":
@@ -345,15 +349,17 @@
                     itemData[detectedObject];
 
                 // If item is not found
-                if (!item) {
+                 if (detectedObject === "Unknown" || !item) {
                     document
                         .getElementById("category")
                         .textContent =
                         "Category: Not Available";
+
                     document
                         .getElementById("advise")
                         .textContent =
                         "This item is not currently available in SFHERA.";
+
                     return;
                 }
 
@@ -362,7 +368,7 @@
                 const type =
                     item.type;
                 let category = "";
-                let comment = "";
+                let Tips = "";
 
                 // STEP 2:
                 // CLASSIFY HEALTH STATUS
@@ -372,20 +378,20 @@
                     if (item.health === "healthy") {
                         category =
                             "Healthy Food";
-                        comment =
-                            comments["healthy_food"];
+                        Tips =
+                            Tipss["healthy_food"];
 
                     } else if (item.health === "moderate") {
                         category =
                             "Moderate Food";
-                        comment =
-                            comments["moderate_food"];
+                        Tips =
+                            Tipss["moderate_food"];
 
                     } else if (item.health === "unhealthy") {
                         category =
                             "Unhealthy Food";
-                        comment =
-                            comments["unhealthy_food"];
+                        Tips =
+                            Tipss["unhealthy_food"];
                     }
 
                 } else if (type === "drink") {
@@ -394,26 +400,26 @@
                     if (item.health === "healthy") {
                         category =
                             "Healthy Drink";
-                        comment =
-                            comments["healthy_drink"];
+                        Tips =
+                            Tipss["healthy_drink"];
 
                     } else if (item.health === "moderate") {
                         category =
                             "Moderate Drink";
-                        comment =
-                            comments["moderate_drink"];
+                        Tips =
+                            Tipss["moderate_drink"];
 
                     } else if (item.health === "unhealthy") {
                         category =
                             "Unhealthy Drink";
-                        comment =
-                            comments["unhealthy_drink"];
+                        Tips =
+                            Tipss["unhealthy_drink"];
                     }
                 }
 
                 // STEP 3:
                 // DISPLAY CATEGORY
-                // AND COMMENT
+                // AND Tips
                 document
                     .getElementById("category")
                     .textContent =
@@ -421,7 +427,7 @@
 
                 document
                     .getElementById("advise")
-                    .textContent = comment;
+                    .textContent = Tips;
             }
         </script>
     </body>
