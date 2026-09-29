@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: #dcffd9;
+    background: #e8ffe6;
     color: white;
 }
 
@@ -175,7 +175,7 @@ Malaysia Healthy Plate
         background:
             linear-gradient(
                 90deg,
-                #daff62,
+                #a7c938,
                 #b8cc00
             );
         -webkit-background-clip: text;
@@ -255,12 +255,14 @@ Malaysia Healthy Plate
         height: 200px;
         width: 200px;
         justify-content: center;
+        color: #051c06;
     }
 
     .advise-container {
         height: 200px;
         width: 200px;
         justify-content: center;
+        color: #051c06;
     }
     
     .start-camera {
@@ -270,7 +272,7 @@ Malaysia Healthy Plate
         border-radius: 10px;
         font-family: Poppins;
         font-weight: 200;
-        margin-top: 60px;
+        margin-top: 35px;
         margin-bottom: 20px;
     }
 
@@ -475,12 +477,20 @@ Malaysia Healthy Plate
         border-color: #45440a;
     }
     
+    .profile {
+        height: 480px;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        gap: 35px;
+    }
+
     .potrait {
         height: 480px;
         width: auto;
         justify-content: center;
         align-items: center;
-        margin: 25px 180px 0px;
     }
 
     .potrait img {
@@ -489,7 +499,46 @@ Malaysia Healthy Plate
         object-fit: contain;
         margin: auto;
         justify-items: center;
-        margin: 25px auto 0;
+    }
+
+    .biodata {
+        height: 430px;
+        width: auto;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .biodata p {
+        font-family: 'Times New Roman';
+        font-weight: 100;
+        font-size: 25px;
+        color: #051c06;
+        margin-bottom: 10px;
+    }
+
+    .biodata h2 {
+        font-family: 'Orbitron';
+        font-weight: 100;
+        font-size: 35px;
+        font-style: italic;
+        color: #051c06;
+        margin-top: 15px;
+    }
+
+    .flow {
+        height: 580px;
+        width: auto;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+    }
+
+    .flow img {
+        height: 100%;
+        width: auto;
+        object-fit: contain;
+        margin: auto;
+        justify-items: center;
     }
 
 /* 
