@@ -1,0 +1,428 @@
+<html>
+    <head>
+        <title>SFHERA - Scan Food</title>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <!-- NAVBAR -->
+        <nav class="navbar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <img src="logobaru.png" alt="SFHERA LOGO">
+                </div>
+                <span class="gold">SFH</span><span class="green">ER</span><span class="gold">A</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="scanning_page.html" class="active">Scan Food</a>
+                <a href="about_us.html">About Us</a>
+                <a href="contact_us.html">Contact Us</a>
+                <a href="#">How It Works</a>
+            </div>
+        </nav>
+
+        <!-- TITLE -->
+        <div class="TitleContent">
+            <h1>SCAN YOUR FOOD</h1>
+            <p>Place your food in the frame</p>
+        </div>
+
+        <!-- CAMERA -->
+        <div class="CamScanner">
+            <div id="webcam-container"></div>
+
+            <!-- RESULT -->
+            <div id="result-container">
+                <div class="result">
+                    <button type="button" class="start-camera" onclick="init()">
+                        Start Camera
+                    </button>
+
+                    <!-- DETECTED ITEM -->
+                    <h2 id="detected-object">
+                        Waiting...
+                    </h2>
+
+                    <!-- CONFIDENCE -->
+                    <p id="confidence">
+                        Confidence: --
+                    </p>
+
+                    <!-- CATEGORY -->
+                    <p id="category">
+                        Category: --
+                    </p>
+                </div>
+
+                <!-- COMMENT -->
+                <div class="advise-container">
+                    <h2><br>Comment</h2>
+                    <p id="advise">--</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-explain">
+                    <img src="logobaru.png" alt="SFHERA LOGO">
+                    <div class="footer-explain-text">
+                        <div class="name">
+                            <span class="gold">SFH</span>
+                            <span class="green">ER</span>
+                            <span class="gold">A</span>
+                        </div>
+                        <p>System for Food Healthy Exploration & Recognition Assistant</p>
+                        <p>Your Gateway To A Healthy Life.</p>
+                        <p><br>Young Coders World Cup 2026</p>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-text">
+                        <h3>Explore</h3>
+                        <a href="index.html">Home</a>
+                        <a href="scanning_page.html">Scan Food</a>
+                    </div>
+                    <div class="footer-text">
+                        <h3>Information</h3>
+                        <a href="about_us.html">About Us</a>
+                        <a href="#">How It Works</a>
+                        <a href="contact_us.html">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>
+                    © 2026 SFHERA. All rights reserved.
+                    <br>Maahad Tahfiz Negeri Pahang
+                </p>
+                <p>Making healthier choices, one scan at a time.</p>
+            </div>
+        </footer>
+
+
+        <!-- TENSORFLOW.JS -->
+        <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+
+        <!-- TEACHABLE MACHINE -->
+        <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+        <script>
+
+            // TEACHABLE MACHINE MODEL
+            const URL =
+                "https://teachablemachine.withgoogle.com/models/8vgNz6dqe/";
+
+            let model;
+            let webcam;
+            let maxPredictions;
+
+            // SFHERA ITEM DATA
+            const itemData = {
+
+                // FOOD
+                "Sausage Roll": {
+                    type: "food",
+                    health: "moderate"
+                },
+
+                "Super Ring": {
+                    type: "food",
+                    health: "unhealthy"
+                },
+
+                "Mister Potato Chips": {
+                    type: "food",
+                    health: "unhealthy"
+                },
+
+                "Jam-Filled Bun": {
+                    type: "food",
+                    health: "moderate"
+                },
+
+                "Chocolate Muffin": {
+                    type: "food",
+                    health: "unhealthy"
+                },
+
+                "Mister Potato Crisp": {
+                    type: "food",
+                    health: "unhealthy"
+                },
+
+                "Chicken Wrap": {
+                    type: "food",
+                    health: "moderate"
+                },
+
+                "Fruits": {
+                    type: "food",
+                    health: "healthy"
+                },
+
+                "Egg Sandwich": {
+                    type: "food",
+                    health: "healthy"
+                },
+
+                "Choco Mucho": {
+                    type: "food",
+                    health: "unhealthy"
+                },
+
+                "Burger": {
+                    type: "food",
+                    health: "unhealthy"
+                },
+
+                // DRINK
+                "Mineral Water": {
+                    type: "drink",
+                    health: "healthy"
+                },
+
+                "Carton Milk": {
+                    type: "drink",
+                    health: "healthy"
+                },
+
+                "Coffee / Kaffein": {
+                    type: "drink",
+                    health: "moderate"
+                },
+
+                "Green Tea": {
+                    type: "drink",
+                    health: "healthy"
+                },
+
+                "Stick Ice Cream": {
+                    type: "drink",
+                    health: "unhealthy"
+                },
+
+                "Ice Lemon Tea": {
+                    type: "drink",
+                    health: "moderate"
+                },
+
+                "Cone Ice Cream": {
+                    type: "drink",
+                    health: "unhealthy"
+                },
+
+                "Sundae Ice Cream": {
+                    type: "drink",
+                    health: "unhealthy"
+                },
+
+                "Ice Cream Bar": {
+                    type: "drink",
+                    health: "unhealthy"
+                },
+
+                "Cup Ice Cream": {
+                    type: "drink",
+                    health: "unhealthy"
+                }
+            };
+
+            // SFHERA COMMENTS
+            const comments = {
+
+                // FOOD
+                "healthy_food":
+                    "Great choice! This food provides nutrients that support a healthy body.",
+
+                "moderate_food":
+                    "A moderate choice. Enjoy this food in moderation as part of a balanced diet.",
+
+                "unhealthy_food":
+                    "Be mindful! This food may be higher in sugar, salt, or fat, so avoid having it too often.",
+
+                // DRINK
+                "healthy_drink":
+                    "Great choice! This drink can help keep your body hydrated and healthy.",
+
+                "moderate_drink":
+                    "A moderate choice. Enjoy this drink occasionally and choose healthier drinks more often.",
+
+                "unhealthy_drink":
+                    "Be mindful! This drink may contain higher amounts of sugar, so it is better consumed less often."
+            };
+
+            // START CAMERA
+            async function init() {
+                const modelURL =
+                    URL + "model.json";
+
+                const metadataURL =
+                    URL + "metadata.json";
+
+                // Load AI model
+                model = await tmImage.load(
+                    modelURL,
+                    metadataURL
+                );
+
+                maxPredictions =
+                    model.getTotalClasses();
+
+                // Setup webcam
+                const flip = true;
+                webcam = new tmImage.Webcam(
+                    600,
+                    400,
+                    flip
+                );
+                await webcam.setup();
+                await webcam.play();
+
+                // Put webcam inside container
+                document
+                    .getElementById("webcam-container")
+                    .appendChild(webcam.canvas);
+                window.requestAnimationFrame(loop);
+            }
+
+            // WEBCAM LOOP
+            async function loop() {
+                webcam.update();
+                await predict();
+                window.requestAnimationFrame(loop);
+            }
+
+            // AI PREDICTION
+            async function predict() {
+                const prediction =
+                    await model.predict(webcam.canvas);
+
+                // Find highest confidence prediction
+                let bestPrediction =
+                    prediction[0];
+                for (
+                    let i = 1;
+                    i < maxPredictions;
+                    i++
+                ) {
+                    if (
+                        prediction[i].probability >
+                        bestPrediction.probability
+                    ) {
+                        bestPrediction =
+                            prediction[i];
+                    }
+                }
+
+                // Get recognised item
+                const detectedObject =
+                    bestPrediction.className.trim()
+
+                // Get confidence
+                const confidence =
+                    (
+                        bestPrediction.probability * 100
+                    ).toFixed(0);
+
+                // Display detected item
+                document
+                    .getElementById("detected-object")
+                    .textContent =
+                    detectedObject;
+
+                // Display confidence
+                document
+                    .getElementById("confidence")
+                    .textContent =
+                    "Confidence: " +
+                    confidence +
+                    "%";
+
+                // FIND ITEM DATA
+                const item =
+                    itemData[detectedObject];
+
+                // If item is not found
+                if (!item) {
+                    document
+                        .getElementById("category")
+                        .textContent =
+                        "Category: Not Available";
+                    document
+                        .getElementById("advise")
+                        .textContent =
+                        "This item is not currently available in SFHERA.";
+                    return;
+                }
+
+                // STEP 1:
+                // CLASSIFY FOOD OR DRINK
+                const type =
+                    item.type;
+                let category = "";
+                let comment = "";
+
+                // STEP 2:
+                // CLASSIFY HEALTH STATUS
+                if (type === "food") {
+
+                    // FOOD + HEALTH STATUS
+                    if (item.health === "healthy") {
+                        category =
+                            "Healthy Food";
+                        comment =
+                            comments["healthy_food"];
+
+                    } else if (item.health === "moderate") {
+                        category =
+                            "Moderate Food";
+                        comment =
+                            comments["moderate_food"];
+
+                    } else if (item.health === "unhealthy") {
+                        category =
+                            "Unhealthy Food";
+                        comment =
+                            comments["unhealthy_food"];
+                    }
+
+                } else if (type === "drink") {
+
+                    // DRINK + HEALTH STATUS
+                    if (item.health === "healthy") {
+                        category =
+                            "Healthy Drink";
+                        comment =
+                            comments["healthy_drink"];
+
+                    } else if (item.health === "moderate") {
+                        category =
+                            "Moderate Drink";
+                        comment =
+                            comments["moderate_drink"];
+
+                    } else if (item.health === "unhealthy") {
+                        category =
+                            "Unhealthy Drink";
+                        comment =
+                            comments["unhealthy_drink"];
+                    }
+                }
+
+                // STEP 3:
+                // DISPLAY CATEGORY
+                // AND COMMENT
+                document
+                    .getElementById("category")
+                    .textContent =
+                    "Category: " + category;
+
+                document
+                    .getElementById("advise")
+                    .textContent = comment;
+            }
+        </script>
+    </body>
+</html>
